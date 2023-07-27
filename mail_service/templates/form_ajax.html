@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Форма отправки писем{% endblock title %}
+
+{% block content %}
+<form method='POST' class='post-form'>
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit" class="save btn btn-secondary">Создать</button>
+</form>
+{% endblock content %}
+
