@@ -1,23 +1,29 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from django.db import models
-from django.utils.translation import gettext_lazy as _
 
 
 class Client(models.Model):
+    """Модель клиента-получателя писем."""
     first_name = models.CharField(
-        verbose_name=_('Имя клиента'),
-        max_length=50,
+        max_length=150,
+        verbose_name='Имя'
     )
     last_name = models.CharField(
-        verbose_name=_('Фамилия клиента'),
-        max_length=50,
+        max_length=150,
+        verbose_name='Фамилия'
     )
     email = models.EmailField(
-        verbose_name=_('Адрес электронной почты'),
+        verbose_name='Адрес почты'
     )
-    birthday_date = models.DateField(
-        verbose_name=_('День рождения'),
+    birthday = models.DateField(
+        verbose_name='Дата рождения',
         blank=True,
     )
-    joined_at = models.DateTimeField(
+    date_joined = models.DateTimeField(
         auto_now_add=True,
     )
+
+    def __str__(self) -> str:
+        return self.email

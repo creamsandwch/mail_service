@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from django.contrib import admin
 
 from clients.models import Client
@@ -7,17 +10,13 @@ from clients.models import Client
 class ClientAdmin(admin.ModelAdmin):
     fields = [
         'id',
-        'email',
         'first_name',
         'last_name',
-        'birthday_date',
-        'joined_at'
-    ]
-    search_fields = [
         'email',
-        'birthday_date',
-        'joined_at',
+        'birthday',
+        'date_joined'
     ]
     readonly_fields = [
-        'joined_at',
+        'date_joined',
+        'id'
     ]
