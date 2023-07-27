@@ -20,3 +20,12 @@ class ClientAdmin(admin.ModelAdmin):
         'date_joined',
         'id'
     ]
+    list_display = [
+        'id',
+        'full_name',
+        'email',
+        'date_joined'
+    ]
+
+    def full_name(self, obj):
+        return obj.first_name + ' ' + obj.last_name
