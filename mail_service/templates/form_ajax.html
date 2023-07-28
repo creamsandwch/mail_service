@@ -1,13 +1,42 @@
 {% extends 'base.html' %}
 
-{% block title %}Форма отправки писем{% endblock title %}
-
+{% block title %}
+Сервис отправки писем
+{% endblock title %}
 {% block content %}
-<form method='POST' id='emailcreateForm'>
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" name="contact-submit" class="btn btn-success btn-lg" />
-</form>
+
+
+<a class="popup-open" href="email" id='modal-email'>Добавить нового подписчика</a>
+<div class="popup-fade" id='modal-email'>
+	<div class="popup">
+		<form method='POST' id='createClientForm'>
+            {% csrf_token %}
+            {{ client_form }}
+            <input type="submit" name="contact-submit" class="btn btn-success btn-lg"/>
+        </form>
+        <a class="popup-close" href="email" id='modal-email'>Закрыть</a>
+	</div>		
+</div>
+
+<a class="popup-open" href="client" id='modal-client'>Создать электронное письмо</a>
+<div class="popup-fade" id='modal-client'>
+	<div class="popup">
+		<form method='POST' id='createEmailForm'>
+            {% csrf_token %}
+            {{ email_form }}
+            <input type="submit" name="contact-submit" class="btn btn-success btn-lg"/>
+        </form>
+        <a class="popup-close" href="client" id='modal-client'>Закрыть</a>
+	</div>		
+</div>
+
+<div>
+    <form method='POST' id='createSendForm'>
+        {% csrf_token %}
+        {{ send_form }}
+        <input type="submit" name="contact-submit" class="btn btn-success btn-lg"/>
+    </form>
+</div>
 {% endblock content %}
 
 {% block javascript %}
@@ -16,16 +45,55 @@
     <script>
         $(document).ready(function () {
             // catch the form's submit event
-            $('#emailcreateForm').submit(function () {
+            $('#createEmailForm').submit(function () {
                 // create an AJAX call
-                console.log('kek')
                 $.ajax({
                     data: $(this).serialize(), // get the form data
                     type: $(this).attr('method'), // GET or POST
-                    url: "{% url 'clients:create_email_form' %}",
+                    url: "{% url 'clients:manage_mail_service' %}",
                     // on success
                     success: function (response) {
-                        alert("Email letter created");
+                        alert("instance created");
+                    },
+                    // on error
+                    error: function (response) {
+                        // alert the error if any error occured
+                        alert(response.responseJSON.errors);
+                        console.log(response.responseJSON.errors)
+                    }
+                });
+                $('#main').load("form_ajax.html");
+                return false;
+            });
+            $('#createClientForm').submit(function () {
+                // create an AJAX call
+                $.ajax({
+                    data: $(this).serialize(), // get the form data
+                    type: $(this).attr('method'), // GET or POST
+                    url: "{% url 'clients:manage_mail_service' %}",
+                    // on success
+                    success: function (response) {
+                        alert("instance created");
+                    },
+                    // on error
+                    error: function (response) {
+                        // alert the error if any error occured
+                        alert(response.responseJSON.errors);
+                        console.log(response.responseJSON.errors)
+                    }
+                });
+                $('#main').load("form_ajax.html");
+                return false;
+            });
+            $('#createSendForm').submit(function () {
+                // create an AJAX call
+                $.ajax({
+                    data: $(this).serialize(), // get the form data
+                    type: $(this).attr('method'), // GET or POST
+                    url: "{% url 'clients:manage_mail_service' %}",
+                    // on success
+                    success: function (response) {
+                        alert("mailing started");
                     },
                     // on error
                     error: function (response) {
@@ -36,6 +104,37 @@
                 });
                 return false;
             });
+            
         })
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('.popup-open').click(function() {
+                id = $(this).attr("id")
+                $('#' + id + '.popup-fade').fadeIn();
+                return false;
+            });	
+            
+            $('.popup-close').click(function() {
+                id = $(this).attr("id")
+                $(this).parents('#' + id + '.popup-fade').fadeOut();
+                return false;
+            });		
+         
+            $(document).keydown(function(e) {
+                if (e.keyCode === 27) {
+                    e.stopPropagation();
+                    $('#' + id + '.popup-fade').fadeOut();
+                }
+            });
+            
+            $('#' + id + '.popup-fade').click(function(e) {
+                id = $(this).attr("id")
+                if ($(e.target).closest('#' + id + '.popup').length == 0) {
+                    $(this).fadeOut();					
+                }
+            });
+        }
+        )
     </script>
 {% endblock javascript %}

@@ -7,8 +7,8 @@ class EmailForm(forms.ModelForm):
     class Meta:
         model = EmailLetter
         fields = [
-            'text',
             'header',
+            'text'
         ]
 
 class ClientForm(forms.ModelForm):
@@ -28,7 +28,7 @@ class SendLetterForm(forms.Form):
         queryset=Client.objects.all(),
         widget=forms.widgets.SelectMultiple(attrs={'class': 'form-control'})
     )
-    email = forms.ModelChoiceField(
+    adresses = forms.ModelChoiceField(
         label='Choose email letter to send',
         queryset=EmailLetter.objects.all(),
         widget=forms.widgets.Select(attrs={'class': 'form-control'})

@@ -20,13 +20,14 @@ class Client(models.Model):
     birthday = models.DateField(
         verbose_name='Дата рождения',
         blank=True,
+        null=True,
     )
     date_joined = models.DateTimeField(
         auto_now_add=True,
     )
     letters = models.ManyToManyField(
         to='EmailLetter',
-        related_name='clients'
+        related_name='clients',
     )
 
     def __str__(self):
@@ -55,3 +56,6 @@ class EmailLetter(models.Model):
     received = models.BooleanField(
         default=False,
     )
+
+    def __str__(self):
+        return str(self.header)

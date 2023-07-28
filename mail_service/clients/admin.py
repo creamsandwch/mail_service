@@ -11,6 +11,7 @@ class ClientAdmin(admin.ModelAdmin):
     readonly_fields = [
         'date_joined',
         'id',
+        'letters',
     ]
     list_display = [
         'id',
