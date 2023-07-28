@@ -1,4 +1,7 @@
-import logging
+#!/usr/local/bin/python
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 
 from django.shortcuts import render
 from django.http import JsonResponse
@@ -7,7 +10,7 @@ from django.shortcuts import get_object_or_404
 
 from clients.forms import SendLetterForm, EmailForm, ClientForm
 from clients.tasks import celery_send_mail
-from clients.models import EmailLetter
+from clients.models import EmailLetter, Client
 
 
 def manage_mail_service_view(request):
@@ -62,7 +65,7 @@ def manage_mail_service_view(request):
             ]
 
             date_to_send = send_form.cleaned_data.get('send_datetime')
-            delay = (timezone.now() - date_to_send).total_seconds()
+            delay = (date_to_send - timezone.now()).total_seconds()
             if delay > 0:
                 celery_send_mail.apply_async(
                     args=[data], countdown=delay
@@ -79,13 +82,26 @@ def manage_mail_service_view(request):
                 },
                 status=200
             )
-    
+    default_client = Client(
+        first_name='Имя',
+        last_name='Фамилия',
+        email='Почтовый адрес',
+        birthday='Дата рождения',
+    )
+    default_letter = EmailLetter(
+        header='Заголовок',
+        text='Текст письма',
+        footer='Подпись',
+    )
+    context={
+            'client_form': client_form,
+            'email_form': email_form,
+            'send_form': send_form,
+            'default_letter': default_letter,
+            'default_client': default_client
+        }
     return render(
         request,
         'form_ajax.html',
-        context={
-            'client_form': client_form,
-            'email_form': email_form,
-            'send_form': send_form
-        }
+        context=context
     )

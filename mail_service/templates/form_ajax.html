@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load bootstrap_tags %}
 
 {% block title %}
 Сервис отправки писем
@@ -6,37 +7,58 @@
 {% block content %}
 
 
-<a class="popup-open" href="email" id='modal-email'>Добавить нового подписчика</a>
+<a class="popup-open" href="email" id='modal-email'>+ новый подписчик</a>
+<br>
 <div class="popup-fade" id='modal-email'>
 	<div class="popup">
 		<form method='POST' id='createClientForm'>
             {% csrf_token %}
-            {{ client_form }}
-            <input type="submit" name="contact-submit" class="btn btn-success btn-lg"/>
+            {{ client_form|as_bootstrap }}
+            <input type="submit" name="contact-submit" class="btn btn-success btn-lg" value="Добавить адресата"/>
         </form>
-        <a class="popup-close" href="email" id='modal-email'>Закрыть</a>
+        <a class="popup-close" href="email" id='modal-email'>X</a>
 	</div>		
 </div>
 
-<a class="popup-open" href="client" id='modal-client'>Создать электронное письмо</a>
+<a class="popup-open" href="client" id='modal-client'> + новое электронное письмо</a>
 <div class="popup-fade" id='modal-client'>
 	<div class="popup">
 		<form method='POST' id='createEmailForm'>
             {% csrf_token %}
-            {{ email_form }}
-            <input type="submit" name="contact-submit" class="btn btn-success btn-lg"/>
+            {{ email_form|as_bootstrap }}
+            <input type="submit" name="contact-submit" class="btn btn-success btn-lg" value="Добавить письмо"/>
         </form>
-        <a class="popup-close" href="client" id='modal-client'>Закрыть</a>
+        <a class="popup-close" href="client" id='modal-client'>X</a>
 	</div>		
 </div>
 
 <div>
     <form method='POST' id='createSendForm'>
         {% csrf_token %}
-        {{ send_form }}
-        <input type="submit" name="contact-submit" class="btn btn-success btn-lg"/>
+        {{ send_form|as_bootstrap }}
+        <input type="submit" name="contact-submit" class="btn btn-success btn-lg" value="Начать рассылку"/>
     </form>
 </div>
+
+
+<a class="popup-open" href="preview" id='preview' value='Превью письма'/>Превью письма</a>
+<div class="popup-fade" id='preview'>
+	<div class="popup">
+        {% with client=default_client%}
+        {% if send_form.adresses.value %}
+            {% with letter=send_form.adresses.value %}
+            {% include 'email_template.html'%}
+            {% endwith %}
+        {% else %}
+            {% with letter=default_letter %}
+            {% include 'email_template.html'%}
+            {% endwith %}
+        {% endif %}
+        {% endwith %}
+        <a class="popup-close" href="preview" id='preview'>X</a>
+	</div>		
+</div>
+
 {% endblock content %}
 
 {% block javascript %}
@@ -136,5 +158,13 @@
             });
         }
         )
+    </script>
+    <script>
+        $('#createSendForm').input(function() {
+            var data = [
+                {default_letter: send_form.adresses.value}
+            ]
+            return false
+        }) 
     </script>
 {% endblock javascript %}

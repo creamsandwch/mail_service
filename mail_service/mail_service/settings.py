@@ -18,7 +18,6 @@ ALLOWED_HOSTS = [
     '*'
 ]
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -30,6 +29,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'djcelery',
     'django_celery_fulldbresult',
+    'django_forms_bootstrap',
     'clients',
 ]
 

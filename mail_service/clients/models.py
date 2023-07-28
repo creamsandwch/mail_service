@@ -45,6 +45,12 @@ class EmailLetter(models.Model):
         blank=False,
         null=False,
     )
+    footer = models.CharField(
+        max_length=150,
+        verbose_name='Футер',
+        blank=True,
+        null=True,
+    )
     header = models.CharField(
         max_length=150,
         verbose_name='Заголовок',
@@ -62,4 +68,4 @@ class EmailLetter(models.Model):
     )
 
     def __str__(self):
-        return '{}'.format(self.header, self.text[:15])
+        return '{}: {}'.format(self.header, self.text[:15])
