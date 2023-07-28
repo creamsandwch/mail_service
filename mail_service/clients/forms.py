@@ -1,3 +1,7 @@
+#!/usr/local/bin/python
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import datetime
 from django import forms
 
@@ -25,17 +29,17 @@ class ClientForm(forms.ModelForm):
 
 class SendLetterForm(forms.Form):
     clients = forms.ModelMultipleChoiceField(
-        label='Choose subscribers for sending to',
+        label='Выберите подписчиков для рассылки',
         queryset=Client.objects.all(),
         widget=forms.widgets.SelectMultiple(attrs={'class': 'form-control'})
     )
     adresses = forms.ModelChoiceField(
-        label='Choose email letter to send',
+        label='Выберите письмо для отправки',
         queryset=EmailLetter.objects.all(),
         widget=forms.widgets.Select(attrs={'class': 'form-control'})
     )
     send_datetime = forms.DateTimeField(
-        label='Send time in Europe/Moscow (default: now)',
+        label='Выберите дату и время отправки по Мск',
         required=False,
         initial=format(datetime.datetime.now(),'%Y-%m-%d %H:%M'),
     )

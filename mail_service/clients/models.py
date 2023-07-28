@@ -1,21 +1,24 @@
+#!/usr/local/bin/python
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
 from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
 
 
+@python_2_unicode_compatible
 class Client(models.Model):
     """Модель клиента-получателя писем."""
     first_name = models.CharField(
         max_length=150,
-        verbose_name='Имя'
+        verbose_name='Имя',
     )
     last_name = models.CharField(
         max_length=150,
-        verbose_name='Фамилия'
+        verbose_name='Фамилия',
     )
     email = models.EmailField(
-        verbose_name='Адрес почты'
+        verbose_name='Адрес почты',
     )
     birthday = models.DateField(
         verbose_name='Дата рождения',
@@ -34,6 +37,7 @@ class Client(models.Model):
         return str(self.email)
 
 
+@python_2_unicode_compatible
 class EmailLetter(models.Model):
     text = models.TextField(
         max_length=1500,
@@ -58,4 +62,4 @@ class EmailLetter(models.Model):
     )
 
     def __str__(self):
-        return str(self.header)
+        return '{}'.format(self.header, self.text[:15])
