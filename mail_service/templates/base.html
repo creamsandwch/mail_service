@@ -47,13 +47,14 @@
         right: 10px;
     }
 </style>
-    
-    <div class="container-py-5" center>
-        <div class="card col-6">
-            <h5 class="card-header">{% block title %}{% endblock title %}</h5>
-            <div class="card-body">
-                {% block content %}
-                {% endblock content %}
+    <div>
+        <div class="h-100 d-flex align-items-center justify-content-center">
+            <div class="card col-6">
+                <h5 class="card-header">{% block title %}{% endblock title %}</h5>
+                <div class="card-body">
+                    {% block content %}
+                    {% endblock content %}
+                </div>
             </div>
         </div>
     </div>
