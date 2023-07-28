@@ -1,3 +1,4 @@
+import datetime
 from django import forms
 
 from clients.models import Client, EmailLetter
@@ -32,4 +33,9 @@ class SendLetterForm(forms.Form):
         label='Choose email letter to send',
         queryset=EmailLetter.objects.all(),
         widget=forms.widgets.Select(attrs={'class': 'form-control'})
+    )
+    send_datetime = forms.DateTimeField(
+        label='Send time in Europe/Moscow (default: now)',
+        required=False,
+        initial=format(datetime.datetime.now(),'%Y-%m-%d %H:%M'),
     )

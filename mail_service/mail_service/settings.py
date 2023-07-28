@@ -11,6 +11,9 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = True
 
+# for switching to postgres backend
+DEBUG_LOCAL = False
+
 ALLOWED_HOSTS = [
     '*'
 ]
@@ -25,6 +28,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'djcelery',
+    'django_celery_fulldbresult',
     'clients',
 ]
 
@@ -62,12 +67,27 @@ WSGI_APPLICATION = 'mail_service.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+
+if DEBUG_LOCAL:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": os.getenv('DB_ENGINE', "django.db.backends.postgresql"),
+            "NAME": os.getenv('DB_NAME', "postgres"),
+            'USER': os.getenv('POSTGRES_USER', "postgres"),
+            'PASSWORD': os.getenv('POSTGRES_PASSWORD', "postgres"),
+            'HOST': os.getenv('DB_HOST', "db"),
+            'PORT': os.getenv('DB_PORT', "5432")
+        }
+    }
+
+
 
 
 # Password validation
@@ -94,7 +114,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -114,3 +134,48 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# CELERY + REDIS
+# Required, won't work if set to True
+CELERY_ALWAYS_EAGER = False
+
+CELERY_IGNORE_RESULT = False
+
+# django_fulldbresult
+CELERY_RESULT_BACKEND =\
+    'django_celery_fulldbresult.result_backends:DatabaseResultBackend'
+
+DJANGO_CELERY_FULLDBRESULT_TRACK_PUBLISH = True
+DJANGO_CELERY_FULLDBRESULT_OVERRIDE_DJCELERY_ADMIN = True
+
+# containerized
+CELERY_BROKER_URL = 'amqp://host.docker.internal'
+
+
+CELERY_TIMEZONE = "UTC"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+
+CELERY_TASK_RESULT_EXPIRES = 18000
+RETRY_PERIOD = 5
+MAX_RETRIES = 15
+
+# RABBITMQ
+RABBITMQ = {
+    "PROTOCOL": "amqp",
+    "HOST": os.getenv("RABBITMQ_HOST", "localhost"),
+    "PORT": os.getenv("RABBITMQ_PORT", 5672),
+    "USER": os.getenv("RABBITMQ_USER", "guest"),
+    "PASSWORD": os.getenv("RABBITMQ_PASSWORD", "guest"),
+}
+
+
+
+# EMAIL CONFIG
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_PORT = os.getenv('EMAIL_PORT')
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')

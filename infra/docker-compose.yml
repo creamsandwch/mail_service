@@ -1,0 +1,54 @@
+version: '3.6'
+services:
+
+  db:
+    image: postgres:13.0-alpine
+    restart: always
+    volumes:
+      - db_volume:/var/lib/postgresql/data/
+    env_file:
+      - ./.env
+
+  mail_service:
+    container_name: mail_service
+    build:
+      context: ../mail_service
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      - static_volume:/mail_service/static/
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_VHOST=vhost
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+
+  celery:
+    restart: always
+    build:
+      context: ../mail_service
+      dockerfile: Dockerfile
+    command: celery -A mail_service worker -l info
+    volumes:
+      - .:/test_celery
+    env_file:
+      - ./.env
+    depends_on:
+      - mail_service
+      - rabbitmq
+
+volumes:
+  static_volume:
+  db_volume:

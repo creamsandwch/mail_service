@@ -1,10 +1,13 @@
+import logging
+
 from django.shortcuts import render
-from django.core.mail import send_mail
-from django.conf import settings
 from django.http import JsonResponse
+from django.utils import timezone
+from django.shortcuts import get_object_or_404
 
 from clients.forms import SendLetterForm, EmailForm, ClientForm
-from clients.models import Client, EmailLetter
+from clients.tasks import celery_send_mail
+from clients.models import EmailLetter
 
 
 def manage_mail_service_view(request):
@@ -40,29 +43,39 @@ def manage_mail_service_view(request):
             send_form = SendLetterForm(request.POST)
             
             if not send_form.is_valid():
-                erorrs = send_form.errors.as_json()
+                errors = send_form.errors.as_json()
                 return JsonResponse({"errors": errors}, status=400)
 
-            letter = send_form.cleaned_data.get('email')
+            header = send_form.cleaned_data.get('adresses')
+            letter = get_object_or_404(EmailLetter, header=header)
             clients = send_form.cleaned_data.get('clients')
 
             letter.clients.clear()
             letter.clients.add(*clients)
             letter.save()
+
+            data = {}
+            data['subject'] = letter.header
+            data['message'] = letter.text
+            data['recipient_list'] = [
+                client.email for client in clients
+            ]
+
+            date_to_send = send_form.cleaned_data.get('send_datetime')
+            delay = (timezone.now() - date_to_send).total_seconds()
+            if delay > 0:
+                celery_send_mail.apply_async(
+                    args=[data], countdown=delay
+                )
+            else:
+                celery_send_mail.apply_async(
+                    args=[data],
+                )
             
-            send_mail(
-                subject=letter.header,
-                message=letter.text,
-                from_email=settings.FROM_EMAIL,
-                recipient_list=[
-                    client.email for client in clients
-                ],
-                fail_silently=False
-            )
             return JsonResponse(
                 {
-                    "letter": letter,
-                    "clients": clients,
+                    "letter": letter.header,
+                    "clients": data.get('recipient_list'),
                 },
                 status=200
             )
