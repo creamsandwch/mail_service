@@ -33,7 +33,7 @@ class ClientAdmin(admin.ModelAdmin):
 class EmailLetterAdmin(admin.ModelAdmin):
     readonly_fields = [
         'sent_at',
-        'received',
+        'is_opened',
     ]
     list_display = [
         'text',

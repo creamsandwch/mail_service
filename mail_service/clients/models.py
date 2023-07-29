@@ -28,10 +28,6 @@ class Client(models.Model):
     date_joined = models.DateTimeField(
         auto_now_add=True,
     )
-    letters = models.ManyToManyField(
-        to='EmailLetter',
-        related_name='clients',
-    )
 
     def __str__(self):
         return str(self.email)
@@ -63,8 +59,15 @@ class EmailLetter(models.Model):
         blank=True,
         null=True,
     )
-    received = models.BooleanField(
+    is_opened = models.BooleanField(
         default=False,
+    )
+    client = models.ForeignKey(
+        Client,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='letters',
     )
 
     def __str__(self):

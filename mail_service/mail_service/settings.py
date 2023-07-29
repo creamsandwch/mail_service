@@ -30,7 +30,9 @@ INSTALLED_APPS = [
     'djcelery',
     'django_celery_fulldbresult',
     'django_forms_bootstrap',
+    'rest_framework',
     'clients',
+    'api',
 ]
 
 MIDDLEWARE = [

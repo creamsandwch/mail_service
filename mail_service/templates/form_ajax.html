@@ -45,9 +45,9 @@
 <div class="popup-fade" id='preview'>
 	<div class="popup">
         {% with client=default_client%}
-        {% if send_form.adresses.value %}
-            {% with letter=send_form.adresses.value %}
-            {% include 'email_template.html'%}
+        {% if letter %}
+            {% with letter=letter %}
+            {% include 'email_template.html with'%}
             {% endwith %}
         {% else %}
             {% with letter=default_letter %}
@@ -162,7 +162,7 @@
     <script>
         $('#createSendForm').input(function() {
             var data = [
-                {default_letter: send_form.adresses.value}
+                {default_letter: send_form.letter.value}
             ]
             return false
         }) 

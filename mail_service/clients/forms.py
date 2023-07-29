@@ -33,7 +33,7 @@ class SendLetterForm(forms.Form):
         queryset=Client.objects.all(),
         widget=forms.widgets.SelectMultiple(attrs={'class': 'form-control'})
     )
-    adresses = forms.ModelChoiceField(
+    letter = forms.ModelChoiceField(
         label='Выберите письмо для отправки',
         queryset=EmailLetter.objects.all(),
         widget=forms.widgets.Select(attrs={'class': 'form-control'})

@@ -17,6 +17,12 @@ def manage_mail_service_view(request):
     email_form = EmailForm()
     client_form = ClientForm()
     send_form = SendLetterForm()
+
+    letter = None
+    if request.GET:
+        send_form = SendLetterForm(request.GET)
+        if send_form.is_valid():
+            letter = send_form.cleaned_data['letter']
     
     if request.method == 'POST' and request.is_ajax():
         if 'header' in request.POST:
@@ -42,20 +48,20 @@ def manage_mail_service_view(request):
                 status=200
             )
 
-        if 'adresses' in request.POST:
+        if 'clients' in request.POST:
             send_form = SendLetterForm(request.POST)
             
             if not send_form.is_valid():
                 errors = send_form.errors.as_json()
                 return JsonResponse({"errors": errors}, status=400)
 
-            header = send_form.cleaned_data.get('adresses')
+            header = send_form.cleaned_data.get('letter')
             letter = get_object_or_404(EmailLetter, header=header)
             clients = send_form.cleaned_data.get('clients')
 
-            letter.clients.clear()
-            letter.clients.add(*clients)
-            letter.save()
+            for client in clients:
+                client.letters.add(letter)
+                client.save()
 
             data = {}
             data['subject'] = letter.header
@@ -93,6 +99,7 @@ def manage_mail_service_view(request):
         text='Текст письма',
         footer='Подпись',
     )
+
     context={
             'client_form': client_form,
             'email_form': email_form,
@@ -100,6 +107,8 @@ def manage_mail_service_view(request):
             'default_letter': default_letter,
             'default_client': default_client
         }
+    if letter:
+        context['letter'] = send_form('letter')
     return render(
         request,
         'form_ajax.html',

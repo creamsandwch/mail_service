@@ -4,11 +4,12 @@ from __future__ import unicode_literals
 
 import logging
 
+from django.utils import timezone
 from django.conf import settings
-from django.core.mail import send_mail, BadHeaderError, EmailMessage
-from django.template import Context
-from django.template.loader import get_template
+from django.core.mail import BadHeaderError, EmailMessage
+from django.shortcuts import get_object_or_404
 from smtplib import SMTPException
+from clients.models import EmailLetter
 
 from mail_service.celeryapp import app as celery_app
 
@@ -34,6 +35,11 @@ def celery_send_mail(data):
                 )
             mail.content_subtype = 'html'
             mail.send(fail_silently=False)
+
+            letter = get_object_or_404(EmailLetter, header=data.get('subject'))
+            letter.sent_at = timezone.now()
+            letter.save()
+
             logger.info(
                 'Mail with subject {} sent to {} successfully!'.format(
                     data.get('subject'),
