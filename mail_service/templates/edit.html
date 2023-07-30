@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{% if clients_list %}Адресаты
+{% elif letters_list %}Письма
+{% endif %}
+{% endblock title %}
+{% block content %}
+
+{% if client_edit %}
+    <div class="card col-12">
+        <form method="post">{% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Обновить данные">
+        </form>
+    </div>	
+{% endfor %}
+{% endif %}
+
+{% endblock content %}

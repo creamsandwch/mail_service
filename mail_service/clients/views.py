@@ -7,6 +7,8 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
+from django.views.generic.list import ListView
+from django.views.generic.edit import UpdateView
 
 from clients.forms import SendLetterForm, EmailForm, ClientForm
 from clients.tasks import celery_send_mail
@@ -18,12 +20,6 @@ def manage_mail_service_view(request):
     client_form = ClientForm()
     send_form = SendLetterForm()
 
-    letter = None
-    if request.GET:
-        send_form = SendLetterForm(request.GET)
-        if send_form.is_valid():
-            letter = send_form.cleaned_data['letter']
-    
     if request.method == 'POST' and request.is_ajax():
         if 'header' in request.POST:
             email_form = EmailForm(request.POST)
@@ -107,10 +103,41 @@ def manage_mail_service_view(request):
             'default_letter': default_letter,
             'default_client': default_client
         }
-    if letter:
-        context['letter'] = send_form('letter')
     return render(
         request,
         'form_ajax.html',
         context=context
     )
+
+
+class ClientListView(ListView):
+    template_name = 'list.html'
+    model = Client
+    context_object_name = 'clients_list'
+
+
+class LetterListView(ListView):
+    template_name = 'list.html'
+    model = EmailLetter
+    context_object_name = 'letters_list'
+
+
+class ClientUpdateView(UpdateView):
+    template_name = "edit.html"
+    model = Client
+    fields = [
+        'first_name',
+        'last_name',
+        'email',
+        'birthday',
+    ]
+
+
+class EmailUpdateView(UpdateView):
+    template_name = "edit.html"
+    model = EmailLetter
+    fields = [
+        'header',
+        'text',
+        'footer',
+    ]

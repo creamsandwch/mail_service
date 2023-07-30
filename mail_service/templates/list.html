@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{% if clients_list %}Адресаты
+{% elif letters_list %}Письма
+{% endif %}
+{% endblock title %}
+{% block content %}
+
+{% if clients_list %}
+    {% for elem in clients_list %}
+        <div class="card col-12">
+            <p>Имя: {{ elem.first_name }}</p>
+            <p>Фамилия: {{ elem.last_name }}</p>
+            <p>Адрес почты: {{ elem.email }}</p>
+            <p>День рождения: {{ elem.birthday }}</p>
+            <p>Дата регистрации: {{ elem.date_joined}}</p>
+            {% if elem.id %}
+            <p><a href="{% url 'clients:clients_update' pk=elem.id %}">Редактировать данные клиента"</a></p>
+            {% endif %}
+            
+        </div>	
+    {% endfor %}
+ 
+{% elif letters_list %}
+{% for elem in letters_list %}
+    <div class="card col-12">
+        <p>Статус: {% if elem.is_opened %}Открыто{% else %}Не открыто{% endif %}</p>
+        <p>Заголовок: {{ elem.header }}</p>
+        <p>Текст: {{ elem.text }}</p>
+        <p>Подпись: {{ elem.footer }}</p>
+        <p>Отправлено: {{ elem.sent_at }}</p>
+        {% if elem.id %}
+        <p><a href="{% url 'clients:letters_update' pk=elem.id %}">Редактировать письмо"<a/></p>
+        {% endif %}
+    </div>	
+{% endfor %}
+{% endif %}
+
+{% endblock content %}

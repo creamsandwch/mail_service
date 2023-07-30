@@ -38,8 +38,5 @@ class EmailLetterAdmin(admin.ModelAdmin):
     list_display = [
         'text',
         'header',
-        'clients'
+        'client'
     ]
-
-    def clients(self, obj):
-        return obj.clients.all().values('email')
