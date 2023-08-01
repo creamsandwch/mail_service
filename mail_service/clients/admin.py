@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.contrib import admin
 
-from clients.models import Client, EmailLetter
+from .models import Client, EmailLetter
 
 
 @admin.register(Client)

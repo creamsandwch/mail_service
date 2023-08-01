@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.utils import timezone
@@ -11,9 +10,9 @@ from django.views.generic.list import ListView
 from django.views.generic.edit import UpdateView
 from django.urls import reverse_lazy
 
-from clients.forms import SendLetterForm, EmailForm, ClientForm
-from clients.tasks import celery_send_mail
-from clients.models import EmailLetter, Client
+from .forms import SendLetterForm, EmailForm, ClientForm
+from .tasks import celery_send_mail
+from .models import EmailLetter, Client
 
 
 def manage_mail_service_view(request):
@@ -31,7 +30,7 @@ def manage_mail_service_view(request):
 
             email_form.save()
             return JsonResponse(email_form.cleaned_data, status=200)
-            
+
         if 'email' in request.POST:
             client_form = ClientForm(request.POST)
 

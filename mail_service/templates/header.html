@@ -1,9 +1,6 @@
 {% block header %}
 {% load static %}
 <header>
-  <div>
-    <p>sadasdadas{{ request.resolver_match.view_name }}</p>
-  </div>
     <nav class="navbar navbar-light" style="background-color: lightskyblue">
       <div class="container">
         <a class="navbar-brand" href="{% url 'clients:manage_mail_service' %}">
