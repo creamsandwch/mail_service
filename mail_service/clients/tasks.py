@@ -13,7 +13,6 @@ from clients.models import EmailLetter
 
 from mail_service.celeryapp import app as celery_app
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -23,7 +22,6 @@ logger = logging.getLogger(__name__)
 )
 def celery_send_mail(data):
     """Delayed mail sending."""
-    logger.info('task {} scheduled'.format(data.get('subject')))
     try:
         for recipient_email in data.get('recipient_list'):
             mail = EmailMessage(
@@ -53,5 +51,3 @@ def celery_send_mail(data):
         logger.warning('Error sending an email.')
     except Exception as error:
         logger.info('Mail sending failed: {}'.format(error))
-    
-    

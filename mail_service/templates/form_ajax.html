@@ -114,6 +114,7 @@
                     // on error
                     error: function (response) {
                         // alert the error if any error occured
+                        console.log('failed to start newsletter')
                         alert(response.responseJSON.errors);
                         console.log(response.responseJSON.errors)
                     }

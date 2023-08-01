@@ -11,5 +11,5 @@ router = DefaultRouter()
 router.register('emails', EmailLetterViewSet, basename='emails')
 
 urlpatterns = [
-    url('', include(router.urls)),
+    url(r'', include(router.urls)),
 ]

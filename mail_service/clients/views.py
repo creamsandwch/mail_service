@@ -20,7 +20,7 @@ def manage_mail_service_view(request):
     client_form = ClientForm()
     send_form = SendLetterForm()
 
-    if request.method == 'POST' and request.is_ajax():
+    if request.method == 'POST':
         if 'header' in request.POST:
             email_form = EmailForm(request.POST)
 
@@ -44,15 +44,16 @@ def manage_mail_service_view(request):
                 status=200
             )
 
-        if 'clients' in request.POST:
+        if 'send_datetime' in request.POST:
             send_form = SendLetterForm(request.POST)
-            
+
             if not send_form.is_valid():
                 errors = send_form.errors.as_json()
                 return JsonResponse({"errors": errors}, status=400)
 
-            header = send_form.cleaned_data.get('letter')
-            letter = get_object_or_404(EmailLetter, header=header)
+            send_form.is_valid()
+
+            letter = send_form.cleaned_data.get('letter')
             clients = send_form.cleaned_data.get('clients')
 
             for client in clients:
@@ -76,7 +77,7 @@ def manage_mail_service_view(request):
                 celery_send_mail.apply_async(
                     args=[data],
                 )
-            
+
             return JsonResponse(
                 {
                     "letter": letter.header,
@@ -87,8 +88,7 @@ def manage_mail_service_view(request):
     default_client = Client(
         first_name='Имя',
         last_name='Фамилия',
-        email='Почтовый адрес',
-        birthday='Дата рождения',
+        email='example@example.com',
     )
     default_letter = EmailLetter(
         header='Заголовок',
@@ -96,7 +96,7 @@ def manage_mail_service_view(request):
         footer='Подпись',
     )
 
-    context={
+    context = {
             'client_form': client_form,
             'email_form': email_form,
             'send_form': send_form,

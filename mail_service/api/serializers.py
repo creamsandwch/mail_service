@@ -18,4 +18,3 @@ class EmailLetterSerializer(serializers.ModelSerializer):
 
     def get_text(self, obj):
         return obj.text[:30]
-

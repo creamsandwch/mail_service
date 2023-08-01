@@ -1,7 +1,7 @@
 <!doctype html>
 {% load static %}
 
-{% include 'header.html' %}
+
 
 <html>
     <head>
@@ -49,9 +49,13 @@
         right: 10px;
     }
 </style>
-    <div>
+    <div class="container">
+        <div class="container">
+        {% include 'header.html' %}
+        </div>
         <div class="h-100 d-flex align-items-center justify-content-center">
-            <div class="card col-6">
+
+            <div class="card col-11">
                 <h5 class="card-header">{% block title %}{% endblock title %}</h5>
                 <div class="card-body">
                     {% block content %}
