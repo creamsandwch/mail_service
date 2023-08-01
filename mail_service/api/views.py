@@ -14,6 +14,11 @@ from clients.models import EmailLetter
 
 
 class EmailLetterViewSet(ModelViewSet):
+    """
+    Эндпоинт, при получении запроса на который
+    при открытии пикселя из письма меняется статус у
+    соответствующего письма в БД.
+    """
     queryset = EmailLetter.objects.all()
     serializer_class = EmailLetterSerializer
     http_method_names = ['get']

@@ -12,7 +12,7 @@
         <{{ letter.footer }}>
         </table>
         {% if letter.header != 'Заголовок' %}
-        <!-- Maybe this will work on a real server. Instead of //localhost:8000 put a real address of a machine. --> 
+        <!-- Maybe this will work on a real server. Instead of //localhost:8000 put a real machine address. --> 
             <img src="http://localhost:8000/api/emails/{{ letter.id }}/is_opened/" width="1px" height="1px" border="0"/>
         {% endif %}
     </body>

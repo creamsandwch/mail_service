@@ -12,7 +12,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = True
 
 # for switching to postgres backend
-DEBUG_LOCAL = False
+DEBUG_LOCAL = True
 
 ALLOWED_HOSTS = [
     '*'
