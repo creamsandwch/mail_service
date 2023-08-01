@@ -2,14 +2,14 @@
 
 Small service that provides mass mailing functionality. You can create or choose an already created template, choose one or many subcribers and plan mailing it to them at future date and time. Frontend done with jquery and ajax with Django MVC project. Containerized in docker, uses PostgreSQL there, so that in ought to launch project locally you must change ```DEBUG_LOCAL``` to ```False``` in ```DJANGO_SETTINGS_MODULE``` (default: ```mail_service/settings.py```).
 ### Tech stack:
--```Python 2.7```
--```jquery```
--```AJAX```
--```Django 1.11.29```
--```celery 3.1.25```
--```Django REST framework```
--```RabbitMQ```
--```PostgreSQL```
+```Python 2.7```
+ ```jquery```
+ ```AJAX```
+ ```Django 1.11.29```
+ ```celery 3.1.25```
+ ```Django REST framework```
+ ```RabbitMQ```
+ ```PostgreSQL```
 
 ### Launching the project:
 To launch project using docker, inside a project folder go to ```infra/``` and prepare a ```.env``` file as in following example:
