@@ -16,7 +16,7 @@
             <p>День рождения: {{ elem.birthday }}</p>
             <p>Дата регистрации: {{ elem.date_joined}}</p>
             {% if elem.id %}
-            <p><a href="{% url 'clients:clients_update' pk=elem.id %}">Редактировать данные клиента"</a></p>
+            <p><a href="{% url 'clients:clients_update' pk=elem.id %}">Редактировать данные клиента</a></p>
             {% endif %}
             
         </div>	
@@ -31,7 +31,7 @@
         <p>Подпись: {{ elem.footer }}</p>
         <p>Отправлено: {{ elem.sent_at }}</p>
         {% if elem.id %}
-        <p><a href="{% url 'clients:letters_update' pk=elem.id %}">Редактировать письмо"<a/></p>
+        <p><a href="{% url 'clients:letters_update' pk=elem.id %}">Редактировать письмо<a/></p>
         {% endif %}
     </div>	
 {% endfor %}

@@ -1,20 +1,17 @@
-{% extends 'base.html' %}
+{% load bootstrap_tags %}
 
-{% block title %}
-{% if clients_list %}Адресаты
-{% elif letters_list %}Письма
+
+{% block title %}Редактировать
+{% if client_edit %}адресата
+{% elif letter_edit %}письмо
 {% endif %}
 {% endblock title %}
 {% block content %}
 
-{% if client_edit %}
-    <div class="card col-12">
-        <form method="post">{% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="Обновить данные">
-        </form>
-    </div>	
-{% endfor %}
-{% endif %}
+<form method='POST' id='createClientForm'>
+    {% csrf_token %}
+    {{ form|as_bootstrap }}
+    <input type="submit" name="contact-submit" class="btn btn-success btn-lg" value="Отправить"/>
+</form>
 
 {% endblock content %}

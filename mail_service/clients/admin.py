@@ -23,7 +23,7 @@ class ClientAdmin(admin.ModelAdmin):
 
     def letters(self, obj):
         '''Отправленные письма.'''
-        return obj.letters.all()
+        return obj.letters.all().values('text')
 
     def full_name(self, obj):
         return obj.first_name + ' ' + obj.last_name
@@ -34,8 +34,10 @@ class EmailLetterAdmin(admin.ModelAdmin):
     readonly_fields = [
         'sent_at',
         'is_opened',
+        'client',
     ]
     list_display = [
+        'id',
         'text',
         'header',
         'client'

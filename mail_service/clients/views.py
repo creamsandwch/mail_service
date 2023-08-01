@@ -9,6 +9,7 @@ from django.utils import timezone
 from django.shortcuts import get_object_or_404
 from django.views.generic.list import ListView
 from django.views.generic.edit import UpdateView
+from django.urls import reverse_lazy
 
 from clients.forms import SendLetterForm, EmailForm, ClientForm
 from clients.tasks import celery_send_mail
@@ -125,19 +126,14 @@ class LetterListView(ListView):
 class ClientUpdateView(UpdateView):
     template_name = "edit.html"
     model = Client
-    fields = [
-        'first_name',
-        'last_name',
-        'email',
-        'birthday',
-    ]
+    form_class = ClientForm
+    context_object_name = 'client_edit'
+    success_url = reverse_lazy('clients:clients_list')
 
 
 class EmailUpdateView(UpdateView):
     template_name = "edit.html"
     model = EmailLetter
-    fields = [
-        'header',
-        'text',
-        'footer',
-    ]
+    form_class = EmailForm
+    context_object_name = 'letter_edit'
+    success_url = reverse_lazy('clients:letters_list')

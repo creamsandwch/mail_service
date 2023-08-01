@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 from django import forms
 from django.utils import timezone
 
-from clients.models import Client, EmailLetter
+from .models import Client, EmailLetter
 
 
 class EmailForm(forms.ModelForm):
@@ -16,6 +16,7 @@ class EmailForm(forms.ModelForm):
             'text',
             'footer',
         ]
+
 
 class ClientForm(forms.ModelForm):
     class Meta:
@@ -42,5 +43,5 @@ class SendLetterForm(forms.Form):
     send_datetime = forms.DateTimeField(
         label='Выберите дату и время отправки по Мск',
         required=False,
-        initial=format(timezone.now(),'%Y-%m-%d %H:%M'),
+        initial=format(timezone.now(), '%Y-%m-%d %H:%M'),
     )

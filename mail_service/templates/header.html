@@ -1,6 +1,9 @@
 {% block header %}
 {% load static %}
 <header>
+  <div>
+    <p>sadasdadas{{ request.resolver_match.view_name }}</p>
+  </div>
     <nav class="navbar navbar-light" style="background-color: lightskyblue">
       <div class="container">
         <a class="navbar-brand" href="{% url 'clients:manage_mail_service' %}">
@@ -8,10 +11,16 @@
           <span style="color:red">mail</span>service
         </a>
       </div>
-        <a class="navbar" href="{% url 'clients:clients_list' %}">Адресаты</a>
-      </div>
-        <a class="navbar" href="{% url 'clients:letters_list' %}">Письма</a>
-      </div>
+      <ul class="nav nav-pills">
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.view_name == 'clients:clients_list' %}active{% endif %}" href="{% url 'clients:clients_list' %}">Письма</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.view_name == 'clients:letters_list' %}active{% endif %}" href="{% url 'clients:letters_list' %}">Адресаты</a>
+        </li>
+      </ul>
+      
+        
     </nav>      
   </header>
 {% endblock %}
