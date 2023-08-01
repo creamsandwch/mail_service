@@ -1,6 +1,6 @@
 ## Mail service
 
-Small service that provides mass mailing functionality. You can create or choose an already created template, choose one or many subcribers and plan mailing it to them at future date and time. Frontend done with jquery and ajax with Django MVC project. Containerized in docker, uses PostgreSQL there, so that in ought to launch project locally you must change ```DEBUG_LOCAL``` to ```False``` in ```DJANGO_SETTINGS_MODULE``` (default: ```mail_service/settings.py```).
+Small service that provides mass mailing functionality. You can create or choose an already created template, choose one or many subcribers and plan mailing it to them at future date and time. Frontend done with jquery and ajax with Django MVC project. Containerized in docker, uses PostgreSQL there, so that in ought to launch project locally you must change ```DEBUG_LOCAL``` to ```False``` in ```DJANGO_SETTINGS_MODULE``` (default: ```mail_service/settings.py```). If you launching project via docker, change ```DEBUG_LOCAL``` to ```False```.
 ### Tech stack:
 ```Python 2.7```
  ```jquery```
