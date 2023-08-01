@@ -28,8 +28,8 @@ def celery_send_mail(data):
                     subject=data.get('subject'),
                     body=data.get('message'),
                     from_email=settings.EMAIL_HOST_USER,
-                    to=recipient_email,
-                    reply_to=settings.EMAIL_HOST_USER,
+                    to=[recipient_email],
+                    reply_to=[settings.EMAIL_HOST_USER],
                 )
             mail.content_subtype = 'html'
             mail.send(fail_silently=False)

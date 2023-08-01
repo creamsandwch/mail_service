@@ -10,10 +10,10 @@
       </div>
       <ul class="nav nav-pills">
         <li class="nav-item">
-          <a class="nav-link {% if request.resolver_match.view_name == 'clients:clients_list' %}active{% endif %}" href="{% url 'clients:clients_list' %}">Письма</a>
+          <a class="nav-link {% if request.resolver_match.view_name == 'clients:clients_list' %}active{% endif %}" href="{% url 'clients:clients_list' %}">Адресаты</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {% if request.resolver_match.view_name == 'clients:letters_list' %}active{% endif %}" href="{% url 'clients:letters_list' %}">Адресаты</a>
+          <a class="nav-link {% if request.resolver_match.view_name == 'clients:letters_list' %}active{% endif %}" href="{% url 'clients:letters_list' %}">Письма</a>
         </li>
       </ul>
       
